@@ -5,10 +5,10 @@ resources:
   - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
     type: GitRepo
     configuration:
-      gitProvider: {{ .Values.myRepo.gitIntegration }}
-      path: {{ .Values.myRepo.path }}
+      gitProvider: {{ .Values.myGitRepo.gitIntegration }}
+      path: {{ .Values.myGitRepo.path }}
       branches:
-        include: {{ .Values.myRepo.branch }}
+        include: {{ .Values.myGitRepo.branch }}
 
   - name: {{ .Values.myPipeline.resourcesPrefix }}art_chart
     type: HelmChart
