@@ -11,7 +11,7 @@ myPipeline:
   jpdSecretsIntegration: acme_co_jpd_secrets
 
 myKubernetes:
-  kubernetesIntegration: acme_co_gke
+  kubernetesIntegration: acme_co_aks
 
 artifactoryChart:
   chartName: artifactory
