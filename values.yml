@@ -1,0 +1,24 @@
+myGitRepo:
+  gitIntegration: acme_co_github
+  path: lsilvapvt/jfrog-pipelines-jpd-helm
+  branch: main 
+
+myPipeline:
+  name: acme_co_jpd_helm_deploy
+  deleteName: acme_co_jpd_helm_delete
+  resourcesPrefix: acme_jpd_
+  artifactoryIntegration: acme_co_artifactory
+  jpdSecretsIntegration: acme_co_jpd_secrets
+
+myKubernetes:
+  kubernetesIntegration: acme_co_gke
+
+artifactoryChart:
+  chartName: artifactory
+  chartVersion: "107.25.6"  
+  releaseName: artifactory
+  namespace: artifactory
+  flags: "--set master.service.type='LoadBalancer' --set artifactory.consoleLog='true' --set artifactory.openMetrics.enabled='true' "
+  repository: acme-helm-jfrog-remote
+
+

@@ -1,0 +1,109 @@
+template: true
+valuesFilePath: ./values.yml
+
+resources:
+  - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
+    type: GitRepo
+    configuration:
+      gitProvider: {{ .Values.myRepo.gitProvider }}
+      path: {{ .Values.myRepo.path }}
+      branches:
+        include: {{ .Values.myRepo.branch }}
+
+  - name: {{ .Values.myPipeline.resourcesPrefix }}art_chart
+    type: HelmChart
+    configuration:
+      sourceArtifactory: {{ .Values.myHelmChart.artifactoryProvider }}
+      repository: {{ .Values.myHelmChart.repository }}
+      chart: {{ .Values.myHelmChart.chartName }}
+      version: {{ .Values.myHelmChart.chartVersion }}
+
+pipelines:
+  - name: {{ .Values.myPipeline.name }}
+    steps:
+      - name: pre_helm_deploy
+        type: Bash
+        configuration:
+          inputResources:
+            - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
+              trigger: false
+          integrations:
+            - name: {{ .Values.myKubernetes.integrationName }}
+            - name: {{ .Values.myPipeline.jpdSecretsIntegration }}
+        execution:
+          onExecute:
+            - echo $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath
+            - ls -la
+            - kubectl config view
+            - add_run_variables MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD}
+            - env
+            # - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+
+      - name: artifactory_deploy
+        type: HelmDeploy
+        configuration:
+          # runtime:      
+          #   type: image
+          #   image:
+          #     custom:
+          #       name: releases-docker.jfrog.io/jfrog/pipelines-u18go
+          #       tag: "1.15.2"
+          # nodePool: MyDynamicGCPNode
+          helmVersion: 3
+          releaseName: {{ .Values.artifactoryChart.releaseName }} 
+          dryRun: true
+          flags: |
+            --set artifactory.masterKey=${MASTER_KEY} 
+            --set artifactory.joinKey=${JOIN_KEY} 
+            --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD}
+            --set databaseUpgradeReady=true
+            {{ .Values.artifactoryChart.flags }}
+          environmentVariables:
+            HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
+          integrations:
+            - name: {{ .Values.myKubernetes.kubernetesIntegration }}
+          inputResources:
+            - name: {{ .Values.myPipeline.resourcesPrefix }}art_chart
+          inputSteps:
+            - name: pre_helm_deploy
+            # export SERVICE_IP=$(kubectl get svc --namespace artifactory artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+
+  - name: {{ .Values.myPipeline.deleteName }}
+    steps:
+      - name: pre_helm_delete
+        type: Bash
+        configuration:
+          inputResources:
+            - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
+              trigger: false
+          integrations:
+            - name: {{ .Values.myKubernetes.kubernetesIntegration }}
+        execution:
+          onExecute:
+            - helm3 ls -n {{ .Values.artifactoryChart.namespace }}
+            - kubectl get ns
+            # check deployment status until done or until timeout
+            # get service IP 
+            # 
+
+      - name: helm_delete
+        type: Bash
+        configuration:
+          # requiresApproval:
+          #   timeoutSeconds: 43200
+          #   approvers:
+          #     - lucianos
+          inputSteps:
+            - name: pre_helm_delete
+          inputResources:
+            - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
+              trigger: false
+          integrations:
+            - name: {{ .Values.myKubernetes.integrationName }}
+        execution:
+          onExecute:
+            - helm3 uninstall {{ .Values.artifactoryChart.releaseName }} -n {{ .Values.artifactoryChart.namespace }}
+            - sleep 10
+            - kubectl delete -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+            - kubectl get ns 
+
