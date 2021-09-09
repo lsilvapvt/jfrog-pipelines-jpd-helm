@@ -37,7 +37,7 @@ pipelines:
             - kubectl config view
             - add_run_variables MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD}
             - env
-            # - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+            - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
 
       - name: artifactory_deploy
         type: HelmDeploy
