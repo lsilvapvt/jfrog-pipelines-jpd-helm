@@ -5,7 +5,7 @@ resources:
   - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
     type: GitRepo
     configuration:
-      gitProvider: {{ .Values.myRepo.gitProvider }}
+      gitProvider: {{ .Values.myRepo.gitIntegration }}
       path: {{ .Values.myRepo.path }}
       branches:
         include: {{ .Values.myRepo.branch }}
@@ -13,10 +13,10 @@ resources:
   - name: {{ .Values.myPipeline.resourcesPrefix }}art_chart
     type: HelmChart
     configuration:
-      sourceArtifactory: {{ .Values.myHelmChart.artifactoryProvider }}
-      repository: {{ .Values.myHelmChart.repository }}
-      chart: {{ .Values.myHelmChart.chartName }}
-      version: {{ .Values.myHelmChart.chartVersion }}
+      sourceArtifactory: {{ .Values.artifactoryChart.artifactoryIntegration }}
+      repository: {{ .Values.artifactoryChart.repository }}
+      chart: {{ .Values.artifactoryChart.chartName }}
+      version: {{ .Values.artifactoryChart.chartVersion }}
 
 pipelines:
   - name: {{ .Values.myPipeline.name }}
@@ -28,7 +28,7 @@ pipelines:
             - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
               trigger: false
           integrations:
-            - name: {{ .Values.myKubernetes.integrationName }}
+            - name: {{ .Values.kubernetesIntegration.integrationName }}
             - name: {{ .Values.myPipeline.jpdSecretsIntegration }}
         execution:
           onExecute:
