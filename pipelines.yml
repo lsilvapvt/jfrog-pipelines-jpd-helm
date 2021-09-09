@@ -28,7 +28,7 @@ pipelines:
             - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
               trigger: false
           integrations:
-            - name: {{ .Values.myKubernetes.integrationName }}
+            - name: {{ .Values.myKubernetes.kubernetesIntegration }}
             - name: {{ .Values.myPipeline.jpdSecretsIntegration }}
         execution:
           onExecute:
