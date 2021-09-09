@@ -53,11 +53,11 @@ pipelines:
           releaseName: {{ .Values.artifactoryChart.releaseName }} 
           dryRun: true
           flags: |
-            --set artifactory.masterKey=${MASTER_KEY} 
-            --set artifactory.joinKey=${JOIN_KEY} 
-            --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD}
-            --set databaseUpgradeReady=true
-            {{ .Values.artifactoryChart.flags }}
+            --set artifactory.masterKey=${MASTER_KEY} \
+            --set artifactory.joinKey=${JOIN_KEY} \
+            --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} \
+            --set databaseUpgradeReady=true \
+            {{ .Values.artifactoryChart.flags }} \
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
           integrations:
