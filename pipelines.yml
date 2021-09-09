@@ -64,6 +64,7 @@ pipelines:
             - name: {{ .Values.myKubernetes.kubernetesIntegration }}
           inputResources:
             - name: {{ .Values.myPipeline.resourcesPrefix }}art_chart
+              trigger: false 
           inputSteps:
             - name: pre_helm_deploy
             # export SERVICE_IP=$(kubectl get svc --namespace artifactory artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
