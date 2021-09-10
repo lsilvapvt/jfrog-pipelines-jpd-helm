@@ -54,7 +54,7 @@ pipelines:
           helmVersion: 3
           releaseName: {{ .Values.artifactoryChart.releaseName }} 
           dryRun: true
-          flags: {{ .Values.artifactoryChart.flags }} --admin.password=${ADMIN_PASSWORD} --license.licenseKey=${LICENSE_KEY} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true
+          flags: {{ .Values.artifactoryChart.flags }} --artifactory.admin.password=${ADMIN_PASSWORD} --license.licenseKey=${LICENSE_KEY} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
           integrations:
