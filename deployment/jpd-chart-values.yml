@@ -272,7 +272,7 @@ artifactory:
     # preStartCommand: "mkdir -p /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib; cd /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib && wget -O /opt/jfrog/artifactory/var/bootstrap/artifactory/tomcat/lib/mysql-connector-java-5.1.41.jar https://jcenter.bintray.com/mysql/mysql-connector-java/5.1.41/mysql-connector-java-5.1.41.jar"
 
   ## Add custom init containers execution before predefined init containers
-  customInitContainersBegin: []
+  customInitContainersBegin: |
   #  - name: "custom-setup"
   #    image: "{{ .Values.initContainerImage }}"
   #    imagePullPolicy: "{{ .Values.artifactory.image.pullPolicy }}"
@@ -285,7 +285,7 @@ artifactory:
   #        name: artifactory-volume
 
   ## Add custom init containers execution after predefined init containers
-  customInitContainers: []
+  customInitContainers: |
   #  - name: "custom-systemyaml-setup"
   #    image: "{{ .Values.initContainerImage }}"
   #    imagePullPolicy: "{{ .Values.artifactory.image.pullPolicy }}"
@@ -300,7 +300,7 @@ artifactory:
   ## Add custom sidecar containers
   # - The provided example uses a custom volume (customVolumes)
   # - The provided example shows running container as root (id 0)
-  customSidecarContainers: []
+  customSidecarContainers: |
   #  - name: "sidecar-list-etc"
   #    image: "{{ .Values.initContainerImage }}"
   #    imagePullPolicy: "{{ .Values.artifactory.image.pullPolicy }}"
@@ -326,13 +326,13 @@ artifactory:
   #        cpu: "100m"
 
   ## Add custom volumes
-  customVolumes: []
+  customVolumes: |
   #  - name: custom-script
   #    configMap:
   #      name: custom-script
 
   ## Add custom volumesMounts
-  customVolumeMounts: []
+  customVolumeMounts: |
   #  - name: custom-script
   #    mountPath: "/scripts/script.sh"
   #    subPath: script.sh
@@ -366,7 +366,7 @@ artifactory:
   ## Artifactory license.
   license:
     ## licenseKey is the license key in plain text. Use either this or the license.secret setting
-    # licenseKey:
+    licenseKey:
     ## If artifactory.license.secret is passed, it will be mounted as
     ## ARTIFACTORY_HOME/etc/artifactory.lic and loaded at run time.
     secret: jpdlicense
@@ -377,7 +377,7 @@ artifactory:
   configMapName:
 
   # Add any list of configmaps to Artifactory
-  configMaps: []
+  configMaps: |
   #  posthook-start.sh: |-
   #    echo "This is a post start script"
   #  posthook-end.sh: |-
@@ -385,7 +385,7 @@ artifactory:
 
   ## List of secrets for Artifactory user plugins.
   ## One Secret per plugin's files.
-  userPluginSecrets: []
+  userPluginSecrets:
   #  - archive-old-artifacts
   #  - build-cleanup
   #  - webhook
@@ -406,7 +406,7 @@ artifactory:
   # joinKeySecretName:
 
   # Add custom secrets - secret per file
-  customSecrets: []
+  customSecrets:
   #  - name: custom-secret
   #    key: custom-secret.yaml
   #    data: >
@@ -440,7 +440,7 @@ artifactory:
 
   ## Extra environment variables that can be used to tune Artifactory to your needs.
   ## Uncomment and set value as needed
-  extraEnvironmentVariables: []
+  extraEnvironmentVariables:
   # - name: SERVER_XML_ARTIFACTORY_PORT
   #   value: "8081"
   # - name: SERVER_XML_ARTIFACTORY_MAX_THREADS

@@ -19,7 +19,7 @@ artifactoryChart:
   chartVersion: "107.25.6"  
   releaseName: artifactory
   namespace: artifactory
-  flags: "-f values.yaml -f values-small.yaml --set master.service.type='LoadBalancer' --set artifactory.consoleLog='true' --set artifactory.openMetrics.enabled='true' "
+  flags: " -f values-small.yaml --set master.service.type='LoadBalancer' --set artifactory.consoleLog='true' --set artifactory.openMetrics.enabled='true' --set databaseUpgradeReady='true' "
   repository: acme-helm-jfrog-remote
 
 

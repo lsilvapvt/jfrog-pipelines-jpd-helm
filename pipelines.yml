@@ -52,7 +52,7 @@ pipelines:
           helmVersion: 3
           releaseName: {{ .Values.artifactoryChart.releaseName }} 
           dryRun: true
-          flags: {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true -f $step_workspace_dir/jpdvalues.yml 
+          flags: -f $step_workspace_dir/jpdvalues.yml {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD}
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
           integrations:
