@@ -52,7 +52,7 @@ pipelines:
           helmVersion: 3
           releaseName: {{ .Values.artifactoryChart.releaseName }} 
           dryRun: true
-          flags: {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true -f $JPD_VALUES_FILE
+          flags: {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true -f $step_workspace_dir/jpdvalues.yml 
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
           integrations:
@@ -64,8 +64,7 @@ pipelines:
             - name: pre_helm_deploy
         execution:
           onStart:
-            - restore_run_files jpd_values_file jpdvalues.yml 
-            - export $JPD_VALUES_FILE=$PWD/jpdvalues.yml 
+            - restore_run_files jpd_values_file $step_workspace_dir/jpdvalues.yml 
 
 
   - name: {{ .Values.myPipeline.deleteName }}
