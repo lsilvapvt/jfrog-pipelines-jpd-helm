@@ -37,6 +37,7 @@ pipelines:
             - ls -la
             - kubectl config view
             - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD} JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml
+            - add_run_files $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml jpd_values_file
             - env
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
             # /router/api/v1/system/health
@@ -61,7 +62,11 @@ pipelines:
               trigger: false 
           inputSteps:
             - name: pre_helm_deploy
-            # export SERVICE_IP=$(kubectl get svc --namespace artifactory artifactory-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        execution:
+          onStart:
+            - restore_run_files jpd_values_file jpdvalues.yml 
+            - export $JPD_VALUES_FILE=$PWD/jpdvalues.yml 
+
 
   - name: {{ .Values.myPipeline.deleteName }}
     steps:
