@@ -1,6 +1,8 @@
 # jfrog-pipelines-jpd-helm
 Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm charts
 
+**Work in progress**
+
 ---
 
 ### How to setup the pipeline
@@ -22,6 +24,8 @@ Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm 
       MASTER_KEY    # generate a value with `openssl rand -hex 32`
       JOIN_KEY      # generate a value with `openssl rand -hex 32`
       POSTGRES_PASSWORD     # generate a value with `openssl rand -hex 12`
+      LICENSE_KEY    # your JFrog license key 
+      ADMIN_PASSWORD    # the password for the admin user 
 
 
 # Had to update helm client to 3.6.3 for local helm pull tests
