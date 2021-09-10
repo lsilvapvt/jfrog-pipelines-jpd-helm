@@ -9,6 +9,7 @@ myPipeline:
   resourcesPrefix: acme_jpd_
   artifactoryIntegration: acme_co_artifactory
   jpdSecretsIntegration: acme_co_jpd_secrets
+  licenseIntegration: acme_co_license
 
 myKubernetes:
   kubernetesIntegration: acme_co_aks
