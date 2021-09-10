@@ -36,31 +36,22 @@ pipelines:
             - echo $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath
             - ls -la
             - kubectl config view
-            - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD}
-            # license.licenseKey=${LICENSE_KEY}
-            # LICENSE_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_LICENSE_KEY} 
+            - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD} JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml
             - env
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
             # /router/api/v1/system/health
             # SERVICE_IP=$(kubectl get svc --namespace art art77-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
             - echo "${int_{{ .Values.myPipeline.licenseIntegration }}_key}" > ./license.key
             - cat ./license.key
-            - kubectl create secret generic jpd-license -n {{ .Values.artifactoryChart.namespace }} --from-file=license-key=./license.key
+            - kubectl create secret generic jpdlicense -n {{ .Values.artifactoryChart.namespace }} --from-file=licensekey=./license.key
 
       - name: artifactory_deploy
         type: HelmDeploy
         configuration:
-          # runtime:      
-          #   type: image
-          #   image:
-          #     custom:
-          #       name: releases-docker.jfrog.io/jfrog/pipelines-u18go
-          #       tag: "1.15.2"
-          # nodePool: MyDynamicGCPNode
           helmVersion: 3
           releaseName: {{ .Values.artifactoryChart.releaseName }} 
           dryRun: true
-          flags: {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set license.secret=jpd-license --set license.dataKey=license-key --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true
+          flags: {{ .Values.artifactoryChart.flags }} --set artifactory.admin.password=${ADMIN_PASSWORD} --set artifactory.masterKey=${MASTER_KEY} --set artifactory.joinKey=${JOIN_KEY} --set postgresql.postgresqlPassword=${POSTGRES_PASSWORD} --set databaseUpgradeReady=true -f $JPD_VALUES_FILE
           environmentVariables:
             HELM_NAMESPACE: {{ .Values.artifactoryChart.namespace }}          
           integrations:
