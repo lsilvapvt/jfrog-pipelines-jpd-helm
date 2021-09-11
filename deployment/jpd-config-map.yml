@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: jpd-config-import
+  namespace: artifactory
+data:
+  artifactory.config.import.xml: |
+    version: 1
+    GeneralConfiguration:
+      # licenseKey : "Enter your license key"
+      baseUrl : {}
+      proxies : []

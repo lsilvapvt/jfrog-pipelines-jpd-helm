@@ -39,9 +39,10 @@ pipelines:
             - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD} JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml
             - add_run_files $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml jpd_values_file
             - env
-            - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
             - echo "${int_{{ .Values.myPipeline.licenseIntegration }}_key}" > ./license.key
             - cat ./license.key
+            - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+            - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-config-map.yml
             - kubectl create secret generic jpdlicense -n {{ .Values.artifactoryChart.namespace }} --from-file=licensekey=./license.key
 
       - name: artifactory_deploy
