@@ -34,3 +34,5 @@ Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm 
 
 # Had to update helm client to 3.6.3 for local helm pull tests
 # https://www.jfrog.com/jira/browse/RTFACT-26063
+
+# https://www.jfrog.com/confluence/display/JFROG/Helm+Charts+for+Advanced+Users

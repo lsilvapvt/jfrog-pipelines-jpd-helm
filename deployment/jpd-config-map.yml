@@ -4,9 +4,12 @@ metadata:
   name: jpd-config-import
   namespace: artifactory
 data:
+  # https://www.jfrog.com/confluence/display/JFROG/Artifactory+Bootstrap+YAML+File
   artifactory.config.import.xml: |
     version: 1
     GeneralConfiguration:
       # licenseKey : "Enter your license key"
-      baseUrl : {}
+      baseUrl : ""
       proxies : []
+  security.import.xml: |
+    <config contents>
