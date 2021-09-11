@@ -40,8 +40,6 @@ pipelines:
             - add_run_files $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml jpd_values_file
             - env
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
-            # /router/api/v1/system/health
-            # SERVICE_IP=$(kubectl get svc --namespace art art77-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
             - echo "${int_{{ .Values.myPipeline.licenseIntegration }}_key}" > ./license.key
             - cat ./license.key
             - kubectl create secret generic jpdlicense -n {{ .Values.artifactoryChart.namespace }} --from-file=licensekey=./license.key
@@ -65,6 +63,9 @@ pipelines:
         execution:
           onStart:
             - restore_run_files jpd_values_file $step_workspace_dir/jpdvalues.yml 
+
+            # /router/api/v1/system/health
+            # SERVICE_IP=$(kubectl get svc --namespace art art77-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
 
 
   - name: {{ .Values.myPipeline.deleteName }}
