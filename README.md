@@ -20,10 +20,9 @@ Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm 
 1. Create a Kubernetes integration for the targeted Kubernetes cluster
      kubernetesIntegration: acme_co_aks
 
-1. Create a generic integration with the following env variables
-      ADMIN_PASSWORD    # the password for the admin user 
-      LICENSE_KEY    # your JFrog license key 
-        <!-- awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}'  license.key -->
+<!-- 1. Create a generic integration with the following env variables
+      ADMIN_PASSWORD    # the password for the admin user  -->
+ 
 
 1. Create a PEM integration with the JFrog license in it 
       licenseIntegration: acme_co_license
