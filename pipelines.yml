@@ -43,7 +43,11 @@ pipelines:
             - add_run_variables JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml MASTER_KEY=$MASTER_KEY JOIN_KEY=$JOIN_KEY POSTGRES_PASSWORD=$POSTGRES_PASSWORD ADMIN_PASSWORD=$ADMIN_PASSWORD
             - add_run_files $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml jpd_values_file
             - env
+            - sed -i "s/ARTIFACTORY_NAMESPACE/{{ .Values.artifactoryChart.namespace }}/g" $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+            - cat $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
+            - sed -i "s/ARTIFACTORY_NAMESPACE/{{ .Values.artifactoryChart.namespace }}/g" $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-config-map.yml
+            - cat $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-config-map.yml
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-config-map.yml
             - echo "${int_{{ .Values.myPipeline.licenseIntegration }}_key}" > ./license.key
             - cat ./license.key

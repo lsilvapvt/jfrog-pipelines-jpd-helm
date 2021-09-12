@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: jpd-config-import
-  namespace: artifactory
+  namespace: ARTIFACTORY_NAMESPACE
 data:
   # https://www.jfrog.com/confluence/display/JFROG/Artifactory+Bootstrap+YAML+File
   artifactory.config.import.xml: |
