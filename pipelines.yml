@@ -35,8 +35,12 @@ pipelines:
           onExecute:
             - echo $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath
             - ls -la
+            - export MASTER_KEY=$(openssl rand -hex 32)
+            - export JOIN_KEY=$(openssl rand -hex 32)
+            - export POSTGRES_PASSWORD=$(openssl rand -hex 12)
             - kubectl config view
-            - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD} JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml
+            - add_run_variables ADMIN_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_ADMIN_PASSWORD} JPD_VALUES_FILE=$res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml MASTER_KEY=$MASTER_KEY JOIN_KEY=$JOIN_KEY POSTGRES_PASSWORD=$POSTGRES_PASSWORD 
+            # - MASTER_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_MASTER_KEY} JOIN_KEY=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_JOIN_KEY} POSTGRES_PASSWORD=${int_{{ .Values.myPipeline.jpdSecretsIntegration }}_POSTGRES_PASSWORD} 
             - add_run_files $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-chart-values.yml jpd_values_file
             - env
             - echo "${int_{{ .Values.myPipeline.licenseIntegration }}_key}" > ./license.key
@@ -44,6 +48,9 @@ pipelines:
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/namespace.yml
             - kubectl apply -f $res_{{ .Values.myPipeline.resourcesPrefix }}git_resource_resourcePath/deployment/jpd-config-map.yml
             - kubectl create secret generic jpdlicense -n {{ .Values.artifactoryChart.namespace }} --from-file=licensekey=./license.key
+            - kubectl create secret generic jpdjoinkey -n {{ .Values.artifactoryChart.namespace }} --from-literal=join-key=${JOIN_KEY}
+            - kubectl create secret generic jpdmasterkey -n {{ .Values.artifactoryChart.namespace }} --from-literal=master-key=${MASTER_KEY}
+            - kubectl create secret generic jpdpostgresspwd -n {{ .Values.artifactoryChart.namespace }} --from-literal=postgres-pwd=${POSTGRES_PASSWORD}
 
       - name: artifactory_deploy
         type: HelmDeploy
@@ -67,6 +74,8 @@ pipelines:
 
             # /router/api/v1/system/health
             # SERVICE_IP=$(kubectl get svc --namespace art art77-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+            #  --set xray.joinKeySecretName=my-joinkey-secret \
+            #  --set xray.masterKeySecretName=my-masterkey-secret \
 
 
   - name: {{ .Values.myPipeline.deleteName }}

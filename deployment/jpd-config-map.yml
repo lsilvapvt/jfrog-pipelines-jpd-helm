@@ -11,5 +11,5 @@ data:
       # licenseKey : "Enter your license key"
       baseUrl : ""
       proxies : []
-  security.import.xml: |
-    <config contents>
+  # security.import.xml: |
+  #   <config contents>

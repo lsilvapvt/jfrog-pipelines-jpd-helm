@@ -6,7 +6,7 @@ artifactory:
     dataKey: licensekey
     
   ## Create configMap with artifactory.config.import.xml and security.import.xml and pass name of configMap in following parameter
-  # configMapName: jpd-config-import
+  configMapName: jpd-config-import
 
   ## List of secrets for Artifactory user plugins.
   ## One Secret per plugin's files.

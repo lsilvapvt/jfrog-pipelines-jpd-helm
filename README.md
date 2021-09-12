@@ -22,9 +22,6 @@ Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm 
 
 1. Create a generic integration with the following env variables
       ADMIN_PASSWORD    # the password for the admin user 
-      MASTER_KEY    # generate a value with `openssl rand -hex 32`
-      JOIN_KEY      # generate a value with `openssl rand -hex 32`
-      POSTGRES_PASSWORD     # generate a value with `openssl rand -hex 12`
       LICENSE_KEY    # your JFrog license key 
         <!-- awk 'NF {sub(/\r/, ""); printf "%s\\n",$0;}'  license.key -->
 
