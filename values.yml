@@ -1,25 +1,23 @@
 myGitRepo:
-  gitIntegration: acme_co_github
-  path: lsilvapvt/jfrog-pipelines-jpd-helm
-  branch: main 
+  gitIntegration: acme_co_github  # the name of the github integration that can access the repo/path referenced below
+  path: lsilvapvt/jfrog-pipelines-jpd-helm   # the path of the git repo containing the pipeline and values to be used for the helm deployment
+  branch: main       # the branch of the git repo 
 
 myPipeline:
-  name: acme_co_jpd_helm_deploy
-  deleteName: acme_co_jpd_helm_delete
-  resourcesPrefix: acme_jpd_
-  artifactoryIntegration: acme_co_artifactory
-  jpdSecretsIntegration: acme_co_jpd_secrets
-  licenseIntegration: acme_co_license
+  name: acme_co_jpd_helm_deploy    # the unique name to configure the helm deploy pipeline with
+  deleteName: acme_co_jpd_helm_delete  # the unique name to configure the helm delete pipeline with
+  resourcesPrefix: acme_jpd_       # a unique prefix to use for the pipeline resource names
+  artifactoryIntegration: acme_co_artifactory   # the id of the artifactory integration (the artifactory server containing the helm chart repository)
+  licenseIntegration: acme_co_license  # the id of the integration containing the JFrog license key information
 
 myKubernetes:
-  kubernetesIntegration: acme_co_aks
+  kubernetesIntegration: acme_co_aks    # the id of the integration with the targeted Kubernetes cluster for deployment 
 
 artifactoryChart:
-  chartName: artifactory
-  chartVersion: "107.25.6"  
-  releaseName: artifactory
-  namespace: artifactory
+  chartName: artifactory     # the name of the artifactory Helm chart 
+  chartVersion: "107.25.6"   # the version of the targeted Helm chart 
+  releaseName: artifactory   # a unique ID for the helm release to be deployed to your Kubernetes cluster 
+  namespace: artifactory     # the targeted Kubernets namespace to deploy the helm chart to 
+  # custom Helm chart flags to be used for the deployment 
   flags: " -f values-small.yaml --set master.service.type='LoadBalancer' --set artifactory.consoleLog='true' --set artifactory.openMetrics.enabled='true' --set databaseUpgradeReady='true' "
-  repository: acme-helm-jfrog-remote
-
-
+  repository: acme-helm-jfrog-remote  # the name of the Helm remote repository in Artifactory which proxies and downloads the Helm charts
