@@ -86,7 +86,7 @@ pipelines:
           integrations:
             - name: {{ .Values.myKubernetes.kubernetesIntegration }}
           inputSteps:
-            - artifactory_deploy
+            - name: artifactory_deploy
         execution:
           onExecute:
             - |
