@@ -89,7 +89,6 @@ pipelines:
             - artifactory_deploy
         execution:
           onExecute:
-            - 
             - |
               echo "The following secrets have been created in the targeted Kubernetes namespace:" &&
               echo "- jpdadminpwd: the generated password for the 'admin' user" &&
