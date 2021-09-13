@@ -29,7 +29,6 @@ pipelines:
               trigger: false
           integrations:
             - name: {{ .Values.myKubernetes.kubernetesIntegration }}
-            - name: {{ .Values.myPipeline.jpdSecretsIntegration }}
             - name: {{ .Values.myPipeline.licenseIntegration }}
         execution:
           onExecute:
@@ -77,9 +76,37 @@ pipelines:
         execution:
           onStart:
             - restore_run_files jpd_values_file $step_workspace_dir/jpdvalues.yml 
-            # /router/api/v1/system/health
-            # SERVICE_IP=$(kubectl get svc --namespace art art77-artifactory-nginx -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
-
+            
+      - name: post_deploy
+        type: Bash
+        configuration:
+          inputResources:
+            - name: {{ .Values.myPipeline.resourcesPrefix }}git_resource
+              trigger: false
+          integrations:
+            - name: {{ .Values.myKubernetes.kubernetesIntegration }}
+          inputSteps:
+            - artifactory_deploy
+        execution:
+          onExecute:
+            - |
+              echo "The following secrets have been created in the targeted Kubernetes namespace:" &&
+              echo "- jpdadminpwd: the generated password for the 'admin' user" &&
+              echo "- jpdmasterkey: the generated master key for the platform deployment" &&
+              echo "- jpdjoinkey: the generated join key for the platform deployment" &&
+              echo "- jpdpostgresspwd: the generated password for postgresql databawe server" &&
+              echo "- jpdlicense: the provided license key" &&
+              echo "" &&
+              echo "To inspect any one of those secrets, use the corresponding kubectl command like the example below:" &&
+              echo "  kubectl get secret jpdadminpwd -n {{ .Values.artifactoryChart.namespace }} -o go-template='{{range \$k,\$v := .data}}{{"### "}}{{\$k}}{{"\n"}}{{\$v|base64decode}}{{"\\n\\n"}}{{end}}'" &&
+              echo "" &&
+              echo "$(kubectl get secret jpdadminpwd -n {{ .Values.artifactoryChart.namespace }} -o go-template='{{range $k,$v := .data}}{{"### "}}{{$k}}{{"\n"}}{{$v|base64decode}}{{"\n\n"}}{{end}}')" $$
+              echo "" &&
+              echo "To access the instance, point to the IP allocated to the main service entry point:" &&
+              echo "" &&
+              echo "$(kubectl get services --namespace {{ .Values.artifactoryChart.namespace }})"
+              # " -o jsonpath='{.status.loadBalancer.ingress[0].ip}'"
+              # /router/api/v1/system/health
 
   - name: {{ .Values.myPipeline.deleteName }}
     steps:

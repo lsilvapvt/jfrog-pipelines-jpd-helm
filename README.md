@@ -1,19 +1,18 @@
-# jfrog-pipelines-jpd-helm
-Sample of JFrog Pipeline to deploy an instance of the JFrog Platform using Helm charts
+## JFrog Platform Deploy with a JFrog Pipeline
 
-**Work in progress**
+This is a sample of a JFrog Pipeline to deploy an instance of the JFrog Platform using Helm charts.
+
+The purpose of this sample is to showcase JFrog Pipeline's' capabilities of deploying a set of Helm charts with custom configuration values, use of pipelines integrations and secrets.
 
 <img src="./images/jpd_deploy_pipeline01.png" alt="JFrog Artifactory Cleanup Pipeline" style="width:400px;background-color:transparent;border:none;" />
+
+The pipeline gets the JFrog helm chart from an Artifactory remote Helm repository, performs some pre-checks and configuration settings in a `pre-check` step (e.g. create Kubernetes namespace; automatically generate keys and passwords as Kubernetes secrets;  parse values and configuration files) and then deploys the helm chart using the [HelmDeploy](https://www.jfrog.com/confluence/display/JFROG/HelmDeploy) native step of JFrog Pipelines.
+
+The sample pipeline file also creates a second pipeline instance to delete and cleanup the deployed Helm charts. 
 
 ---
 
 **Note: This is a sample pipeline implementation. The code available here is not supported or guaranteed to work. Use at your own risk.**
-
----
-
-The purpose of this sample is to showcase JFrog Pipeline's' capabilities of deploying a set of Helm charts with custom configuration values, use of pipelines integrations and secrets.
-
-The pipeline gets the JFrog helm chart from an Artifactory remote Helm repository, performs some pre-checks and configuration settings in a `pre-check` step (e.g. create Kubernetes namespace; automatically generate keys and passwords as Kubernetes secrets;  parse values and configuration files) and then deploys the helm chart using the [HelmDeploy](https://www.jfrog.com/confluence/display/JFROG/HelmDeploy) native step of JFrog Pipelines.
 
 ---
 
