@@ -98,9 +98,9 @@ pipelines:
               echo "- jpdpostgresspwd: the generated password for postgresql databawe server" &&
               echo "- jpdlicense: the provided license key" &&
               echo "" &&
-              echo "To inspect any one of those secrets, use the corresponding kubectl command like the example below:" &&
-              echo "  kubectl get secret jpdadminpwd -n {{ .Values.artifactoryChart.namespace }} -o go-template='{{range \$k,\$v := .data}}{{\"### \"}}{{\$k}}{{\"\n\"}}{{\$v|base64decode}}{{\"\\n\\n\"}}{{end}}'" &&
-              echo "" &&
+              # echo "To inspect any one of those secrets, use the corresponding kubectl command like the example below:" &&
+              # echo "  kubectl get secret jpdadminpwd -n {{ .Values.artifactoryChart.namespace }} -o go-template='{{range \$k,\$v := .data}}{{\"### \"}}{{\$k}}{{\"\n\"}}{{\$v|base64decode}}{{\"\\n\\n\"}}{{end}}'" &&
+              # echo "" &&
               echo "To access the instance, point to the IP allocated to the main service entry point:" &&
               echo "" &&
               echo "$(kubectl get services --namespace {{ .Values.artifactoryChart.namespace }})"
