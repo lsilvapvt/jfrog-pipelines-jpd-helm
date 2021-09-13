@@ -4,9 +4,11 @@ This is a sample of a JFrog Pipeline to deploy an instance of the JFrog Platform
 
 The purpose of this sample is to showcase JFrog Pipeline's' capabilities of deploying a set of Helm charts with custom configuration values, use of pipelines integrations and secrets.
 
+
 <img src="./images/jpd_deploy_pipeline01.png" alt="JFrog Artifactory Cleanup Pipeline" style="width:400px;background-color:transparent;border:none;" />
 
-The pipeline gets the JFrog helm chart from an Artifactory remote Helm repository, performs some pre-checks and configuration settings in a `pre-check` step (e.g. create Kubernetes namespace; automatically generate keys and passwords as Kubernetes secrets;  parse values and configuration files) and then deploys the helm chart using the [HelmDeploy](https://www.jfrog.com/confluence/display/JFROG/HelmDeploy) native step of JFrog Pipelines.
+
+The pipeline gets the JFrog helm chart from an Artifactory remote Helm repository, performs some pre-checks and configuration settings in a `pre-check` step (e.g. creates Kubernetes namespace; automatically generates keys and passwords as Kubernetes secrets;  parses values and configuration files) and then deploys the helm chart using the [HelmDeploy](https://www.jfrog.com/confluence/display/JFROG/HelmDeploy) native step of JFrog Pipelines.
 
 The sample pipeline file also creates a second pipeline instance to delete and cleanup the deployed Helm charts. 
 
@@ -30,7 +32,7 @@ The sample pipeline file also creates a second pipeline instance to delete and c
 
 1. In Artifactory, create a [PEM integration](https://www.jfrog.com/confluence/display/JFROG/PEM+Key+Integration) entry with the JFrog license key in it.
 
-1. Upddate `values.yml` with your own values, see inline comments in the file for guidance. 
+1. Update `values.yml` with your own values, see inline comments in the file for guidance. 
 
 1. Add your git repo from (1) as a [pipeline source](https://www.jfrog.com/confluence/display/JFROG/Pipelines+Step-By-Step#PipelinesStep-By-Step-add-pipeline-sourceAddaPipelineSource) to your JFrog Platform.
 

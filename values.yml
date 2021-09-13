@@ -17,7 +17,7 @@ artifactoryChart:
   chartName: artifactory     # the name of the artifactory Helm chart 
   chartVersion: "107.25.6"   # the version of the targeted Helm chart 
   releaseName: artifactory   # a unique ID for the helm release to be deployed to your Kubernetes cluster 
-  namespace: artifactory     # the targeted Kubernets namespace to deploy the helm chart to 
+  namespace: jpdrt     # the targeted Kubernets namespace to deploy the helm chart to 
   # custom Helm chart flags to be used for the deployment 
   flags: " -f values-small.yaml --set master.service.type='LoadBalancer' --set artifactory.consoleLog='true' --set artifactory.openMetrics.enabled='true' --set databaseUpgradeReady='true' "
   repository: acme-helm-jfrog-remote  # the name of the Helm remote repository in Artifactory which proxies and downloads the Helm charts
